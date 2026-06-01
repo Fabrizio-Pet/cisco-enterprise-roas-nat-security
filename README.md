@@ -18,7 +18,7 @@ The architecture is built from scratch using Cisco Packet Tracer and achieves th
 ---
 
 ## 🛠️ Network Topology Diagram
-![Network Topology](topology.png)
+![Network Topology](network_topology.png)
 *(Make sure to upload your Packet Tracer screenshot to the repository with the name topology.png)*
 
 ---
