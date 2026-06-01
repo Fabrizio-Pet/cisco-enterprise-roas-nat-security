@@ -1,0 +1,133 @@
+Building configuration...
+
+Current configuration : 2225 bytes
+!
+version 12.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+!
+hostname Router
+!
+!
+!
+enable secret 5 $1$mERr$5.a6P4JqbNiMX01usIfka/
+!
+!
+!
+ip dhcp pool Development POOL
+ network 192.168.10.0 255.255.255.192
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+ip dhcp pool Sellings POOL
+ network 192.168.10.64 255.255.255.192
+ default-router 192.168.10.65
+ dns-server 8.8.8.8
+ip dhcp pool Guests POOL
+ network 192.168.10.192 255.255.255.192
+ default-router 192.168.10.193
+ dns-server 8.8.8.8
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.192
+ ip nat inside
+!
+interface FastEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.10.65 255.255.255.192
+ ip access-group 101 in
+ ip nat inside
+!
+interface FastEthernet0/0.40
+ encapsulation dot1Q 40
+ ip address 192.168.10.193 255.255.255.192
+ ip access-group 102 in
+ ip nat inside
+!
+interface FastEthernet1/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial2/0
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Serial3/0
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface FastEthernet4/0
+ ip address 203.0.113.1 255.255.255.252
+ ip nat outside
+!
+interface FastEthernet5/0
+ no ip address
+ shutdown
+!
+ip nat inside source list 1 interface FastEthernet4/0 overload
+ip classless
+ip route 0.0.0.0 0.0.0.0 203.0.113.2 
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 192.168.10.0 0.0.0.63
+access-list 1 permit 192.168.10.64 0.0.0.63
+access-list 1 permit 192.168.10.192 0.0.0.63
+access-list 101 permit tcp 192.168.10.64 0.0.0.63 host 192.168.10.2 eq www
+access-list 101 permit tcp 192.168.10.64 0.0.0.63 host 192.168.10.2 eq 443
+access-list 101 deny ip 192.168.10.64 0.0.0.63 192.168.10.0 0.0.0.63
+access-list 101 permit ip any any
+access-list 102 deny ip 192.168.10.192 0.0.0.63 192.168.10.0 0.0.0.63
+access-list 102 deny ip 192.168.10.192 0.0.0.63 192.168.10.64 0.0.0.63
+access-list 102 permit ip any any
+!
+!
+!
+!
+!
+!
+line con 0
+ password 7 0822455D0A16544541
+ login
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
